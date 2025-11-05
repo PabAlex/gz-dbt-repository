@@ -1,12 +1,65 @@
 version: 2
 
 sources:
-  - name: raw        # alias du dataset 
+  - name: raw        # alias du dataset
+    database: lewagonproject-476109
     schema: gz_raw_data  # indique le dataset BigQuery
+    loader: bigquery
+    description: >
+      Dataset brut contenant les données sources issues de Greenweez :
+      sales, products et ship. 
+      Chaque table correspond à un extrait de données opérationnelles non transformées
     tables:
-      - name: sales      # alias de la table
-        identifier: raw_gz_sales  # nom dans BigQuery
+      - name: sales
+        identifier: raw_gz_sales
+        description: >
+          Ventes de Greenweez — une ligne par produit trouvé dans chaque commande.
+        loaded_at_field: date_date
+        freshness:
+          warn_after: {count: 90, period: day}
+        columns:
+          - name: date_date
+            description: Date d'achat (jour de la commande)
+          - name: orders_id
+            description: Identifiant unique de la commande
+            tests: [not_null]
+          - name: pdt_id
+            description: Identifiant du produit vendu
+            tests: [not_null]
+          - name: revenue
+            description: Chiffre d'affaires (montant total pour la ligne de commande)
+          - name: quantity
+            description: Quantité de produits vendus pour cette ligne
+
       - name: product
         identifier: raw_gz_product
+        description: >
+          Table des produits Greenweez, contenant les informations de base sur chaque article.
+        columns:
+          - name: products_id
+            description: Identifiant unique du produit
+            tests:
+              - unique
+              - not_null
+              
+          - name: purchase_price
+            description: Prix d'achat du produit pour Greenweez
+          - name: category
+            description: Catégorie ou famille du produit
+
       - name: ship
         identifier: raw_gz_ship
+        description: >
+          Données d’expédition liées aux commandes Greenweez : coûts logistiques et frais d’expédition.
+        columns:
+          - name: orders_id
+            description: Identifiant unique de la commande
+            tests:
+              - unique
+              - not_null
+          - name: shipping_fee
+            description: Frais de livraison facturés au client
+          - name: ship_cost
+            description: Coût d’expédition supporté par Greenweez
+          - name: logcost
+            description: Coût logistique additionnel

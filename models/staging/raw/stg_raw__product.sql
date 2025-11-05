@@ -13,6 +13,7 @@ renamed as (
         CAST(purchse_price as FLOAT64) AS purchase_price
 
     from source
+    WHERE products_id IS NOT NULL
 
 )
 
