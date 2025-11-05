@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: raw        # alias du dataset 
+    schema: gz_raw_data  # indique le dataset BigQuery
+    tables:
+      - name: sales      # alias de la table
+        identifier: raw_gz_sales  # nom dans BigQuery
+      - name: product
+        identifier: raw_gz_product
+      - name: ship
+        identifier: raw_gz_ship
