@@ -1,5 +1,5 @@
 with p as (
-  select * from {{ ref('stg_cc_parcel') }}
+  select * from {{ ref('cc_parcel') }}
 ),
 pp as (
   select * from {{ ref('stg_cc_parcel_products') }}
