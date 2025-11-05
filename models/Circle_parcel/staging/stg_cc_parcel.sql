@@ -16,7 +16,7 @@ renamed as (
         SAFE.PARSE_DATE('%B %e, %Y', Date_purCHase) as date_purchase,
         SAFE.PARSE_DATE('%B %e, %Y', Date_sHIpping) as date_shipping,
         SAFE.PARSE_DATE('%B %e, %Y', DATE_delivery) as date_delivery,
-        SAFE.PARSE_DATE('%B %e, %Y', DaTeCANcelled) as datecancelled
+        SAFE.PARSE_DATE('%B %e, %Y', DaTeCANcelled) as date_cancelled
 
     from source
 
