@@ -23,7 +23,13 @@ select
 o.orders_id,
 o.date_date,
 ROUND((o.margin + s.shipping_fee - s.logcost - s.ship_cost),2) as operational_margin,
-o.quantity
+o.quantity,
+o.revenue,
+o.purchase_cost,
+o.margin,
+s.shipping_fee,
+s.logcost,
+s.ship_cost
 from orders o 
 left join ship s 
 using(orders_id)
