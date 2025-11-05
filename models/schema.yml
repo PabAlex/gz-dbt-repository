@@ -63,3 +63,106 @@ sources:
             description: Coût d’expédition supporté par Greenweez
           - name: logcost
             description: Coût logistique additionnel
+
+models:
+  - name: int_sales_margin
+    description: >
+      Joint les ventes et les produits pour calculer, ligne par ligne,
+      le coût d’achat (quantity * purchase_price) et la marge (revenue - purchase_cost).
+    columns:
+      - name: date_date
+        description: Date de la ligne de vente
+        tests: [not_null]
+      - name: orders_id
+        description: Identifiant de commande
+        tests: [not_null]
+      - name: products_id
+        description: Identifiant du produit
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_raw__product')
+              field: products_id
+      - name: quantity
+        description: Quantité vendue sur la ligne
+      - name: revenue
+        description: Revenu de la ligne de commande
+      - name: purchase_price
+        description: Prix d’achat unitaire du produit
+      - name: purchase_cost
+        description: Coût d’achat total de la ligne (quantity * purchase_price)
+      - name: margin
+        description: Marge brute de la ligne (revenue - purchase_cost)
+
+  - name: int_orders_margin
+    description: >
+      Agrège int_sales_margin au niveau commande (1 ligne = 1 order_id) :
+      revenue, quantity, purchase_cost et margin par commande.
+    columns:
+      - name: orders_id
+        description: Identifiant unique de la commande (niveau agrégé)
+        tests: [not_null, unique]
+      - name: date_date
+        description: Date associée à la commande
+        tests: [not_null]
+      - name: revenue
+        description: Somme du revenu de la commande
+      - name: quantity
+        description: Somme des quantités de la commande
+      - name: purchase_cost
+        description: Coût d’achat total de la commande
+      - name: margin
+        description: Marge brute totale de la commande
+
+  - name: int_orders_operational
+    description: >
+      Rejoint les frais d’expédition/logistiques à int_orders_margin et calcule
+      la marge opérationnelle : margin + shipping_fee - logcost - ship_cost.
+    columns:
+      - name: orders_id
+        description: Identifiant unique de la commande (niveau agrégé)
+        tests: [not_null, unique]
+      - name: date_date
+        description: Date associée à la commande
+        tests: [not_null]
+      - name: quantity
+        description: Quantité totale dans la commande
+      - name: revenue
+        description: Revenu total de la commande
+      - name: purchase_cost
+        description: Coût d’achat total de la commande
+      - name: margin
+        description: Marge brute de la commande
+      - name: shipping_fee
+        description: Frais facturés au client pour la livraison
+      - name: logcost
+        description: Coût logistique de la commande
+      - name: ship_cost
+        description: Coût d’expédition pour l’entreprise
+      - name: operational_margin
+        description: Marge opérationnelle (margin + shipping_fee - logcost - ship_cost)
+
+  - name: finance_days
+    description: >
+      Mart quotidien pour la Finance : transactions, revenu, panier moyen,
+      marge opérationnelle, coûts et quantités.
+    columns:
+      - name: date_date
+        description: Jour d’agrégation (1 ligne par jour)
+        tests: [not_null, unique]
+      - name: total_transactions
+        description: Nombre de commandes distinctes du jour
+      - name: total_revenue
+        description: Somme des revenus du jour
+      - name: average_basket
+        description: Panier moyen (total_revenue / total_transactions)
+      - name: operational_margin
+        description: Somme des marges opérationnelles du jour
+      - name: total_purchase_cost
+        description: Somme des coûts d’achat du jour
+      - name: total_shipping_fees
+        description: Somme des frais de livraison facturés
+      - name: total_log_costs
+        description: Somme des coûts logistiques
+      - name: total_quantity
+        description: Quantité totale vendue
