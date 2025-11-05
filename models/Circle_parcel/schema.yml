@@ -1,0 +1,47 @@
+version: 2
+
+sources:
+  - name: raw_circle
+    schema: raw_data_circle
+    tables:
+      - name: cc_parcel
+        identifier: raw_cc_parcel
+        description: >
+          Table contenant les informations sur les colis expédiés :
+          identifiant, transporteur, priorité et dates associées à la commande, l’expédition, la livraison et l’annulation.
+        columns:
+          - name: Parcel_id
+            description: Identifiant unique du colis.
+            tests:
+              - not_null
+              - unique
+          - name: Parcel_tracking
+            description: Code de suivi du colis.
+          - name: Transporter
+            description: Nom du transporteur en charge du colis.
+          - name: Priority
+            description: Niveau de priorité de l'expédition (normal,urgent)
+          - name: Date_purCHase
+            description: Date d’achat du produit.
+          - name: Date_sHIpping
+            description: Date d’expédition du colis.
+          - name: DATE_delivery
+            description: Date de livraison prévue ou réelle.
+          - name: DaTeCANcelled
+            description: Date d’annulation si applicable.
+
+      - name: cc_parcel_product
+        identifier: raw_cc_parcel_product
+        description: Table contenant le détail des produits liés à chaque colis.
+        columns:
+          - name: ParCEL_id
+            description: Référence du colis auquel est associé le produit.
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw_circle', 'parcel')
+                  field: Parcel_id
+          - name: Model_mAME
+            description: Nom du modèle de produit envoyé.
+          - name: QUANTITY
+            description: Quantité de chaque produit dans le colis.
