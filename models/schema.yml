@@ -55,7 +55,7 @@ sources:
           - name: orders_id
             description: Identifiant unique de la commande
             tests:
-              - unique0
+              - unique
               - not_null
           - name: shipping_fee
             description: Frais de livraison facturés au client
