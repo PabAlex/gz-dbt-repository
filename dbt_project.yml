@@ -41,6 +41,10 @@ models:
       +materialized: view
       marketing:
       +schema: marketing
+    intermediate:
+      +materialized: view
+      marketing:
+      +schema: marketing_int
     mart :
       +materialized: table
       finance :
