@@ -19,6 +19,10 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
+snapshots :
+  my_new_project:
+    +target_schema: dbt_snapshots
+
 target-path: "target"  # directory which will store compiled SQL files
 clean-targets:         # directories to be removed by `dbt clean`
   - "target"
@@ -54,4 +58,3 @@ models:
       +schema: parcel_dbt_dev
       staging : 
         +schema: parcel_dbt_dev_staging
-    +target_schema: snapshots
