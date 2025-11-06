@@ -40,15 +40,15 @@ models:
     staging:
       +materialized: view
       marketing:
-      +schema: marketing
+       +schema: marketing
     intermediate:
       +materialized: view
       marketing:
-      +schema: marketing_int
+       +schema: marketing_int
     mart :
       +materialized: table
       finance :
-      +schema: finance
+       +schema: finance
     Circle_parcel:
       +materialized: view
       +schema: parcel_dbt_dev
