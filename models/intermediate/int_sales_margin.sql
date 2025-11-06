@@ -23,7 +23,8 @@ s.quantity,
 s.revenue,
 p.purchase_price,
 ROUND((s.quantity * p.purchase_price),2) AS purchase_cost,
-ROUND((s.revenue - (s.quantity * p.purchase_price)),2) AS margin
+ROUND((s.revenue - (s.quantity * p.purchase_price)),2) AS margin,
+{{ margin_percent(revenue, purchase_cost) }} as margin_percent
 from sales s
 left join product p
   using (products_id)
