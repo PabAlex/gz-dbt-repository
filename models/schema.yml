@@ -55,7 +55,7 @@ sources:
           - name: orders_id
             description: Identifiant unique de la commande
             tests:
-              - unique
+              - unique0
               - not_null
           - name: shipping_fee
             description: Frais de livraison facturés au client
@@ -63,6 +63,82 @@ sources:
             description: Coût d’expédition supporté par Greenweez
           - name: logcost
             description: Coût logistique additionnel
+
+      - name: adwords           
+        identifier: raw_gz_adwords  
+        description: Données Google Ads (campagnes).
+        loaded_at_field: date_date
+        freshness:
+          warn_after: {count: 90, period: day}
+      - name: bing
+        identifier: raw_gz_bing
+        description: Données Bing Ads (campagnes).
+        loaded_at_field: date_date
+        freshness:
+          warn_after: {count: 90, period: day}
+      - name: criteo
+        identifier: raw_gz_criteo
+        description: Données Criteo (campagnes).
+        loaded_at_field: date_date
+        freshness:
+          warn_after: {count: 90, period: day}
+      - name: facebook
+        identifier: raw_gz_facebook
+        description: Données Facebook Ads (campagnes).
+        loaded_at_field: date_date
+        freshness:
+          warn_after: {count: 90, period: day}
+
+intermediate: 
+      - name: int_campaigns_day
+        description: >
+          Agrégat journalier des coûts et volumes marketing toutes plateformes
+          (AdWords, Bing, Criteo, Facebook). 1 ligne = 1 jour.
+        columns:
+      - name: date_date
+        description: Jour d'agrégation
+        tests:
+          - not_null
+          - unique
+
+      - name: total_ads_cost
+        description: Dépenses publicitaires totales (toutes plateformes) du jour
+        tests:
+          - not_null
+
+      - name: total_impressions
+        description: Impressions totales du jour (toutes plateformes)
+        tests:
+          - not_null
+
+      - name: total_clicks
+        description: Clics totaux du jour (toutes plateformes)
+        tests:
+          - not_null
+
+      - name: adwords_ads_cost
+        description: Dépenses publicitaires Google Ads du jour
+
+      - name: bing_ads_cost
+        description: Dépenses publicitaires Bing du jour
+
+      - name: criteo_ads_cost
+        description: Dépenses publicitaires Criteo du jour
+
+      - name: facebook_ads_cost
+        description: Dépenses publicitaires Facebook du jour
+
+      - name: nb_adwords
+        description: Nombre de lignes/campagnes comptabilisées pour AdWords (jour)
+
+      - name: nb_bing
+        description: Nombre de lignes/campagnes comptabilisées pour Bing (jour)
+
+      - name: nb_criteo
+        description: Nombre de lignes/campagnes comptabilisées pour Criteo (jour)
+
+      - name: nb_facebook
+        description: Nombre de lignes/campagnes comptabilisées pour Facebook (jour)
 
 models:
   - name: int_sales_margin
@@ -166,3 +242,56 @@ models:
         description: Somme des coûts logistiques
       - name: total_quantity
         description: Quantité totale vendue
+  - name: finance_campaigns_day
+    description: >
+      Vue mart quotidienne combinant métriques finance (finance_days) et
+      agrégats marketing (int_campaigns_day), incluant la marge après
+      dépenses publicitaires.
+    columns:
+      - name: date_date
+        description: Jour d'agrégation (clé)
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('finance_days')
+              field: date_date
+
+      - name: ads_margin
+        description: Marge opérationnelle diminuée des dépenses publicitaires du jour
+
+      - name: average_basket
+        description: Panier moyen (hérité de finance_days)
+
+      - name: operational_margin
+        description: Marge opérationnelle du jour (héritée de finance_days)
+
+      - name: ads_cost
+        description: Dépenses publicitaires totales du jour (toutes plateformes)
+
+      - name: ads_impressions
+        description: Impressions publicitaires totales du jour
+
+      - name: ads_clicks
+        description: Clics publicitaires totaux du jour
+
+      - name: quantity
+        description: Quantité totale vendue (héritée de finance_days)
+
+      - name: revenue
+        description: Revenu total du jour (hérité de finance_days)
+
+      - name: purchase_cost
+        description: Coût d’achat total du jour (hérité de finance_days)
+
+      - name: margin
+        description: Marge brute du jour (héritée de finance_days)
+
+      - name: shipping_fee
+        description: Frais de livraison facturés (hérité de finance_days)
+
+      - name: log_cost
+        description: Coûts logistiques (hérité de finance_days)
+
+      - name: ship_cost
+        description: Coûts d’expédition (hérité de finance_days)
