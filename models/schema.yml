@@ -55,7 +55,7 @@ sources:
           - name: orders_id
             description: Identifiant unique de la commande
             tests:
-              - unique
+              - unique0
               - not_null
           - name: shipping_fee
             description: Frais de livraison facturés au client
@@ -63,6 +63,31 @@ sources:
             description: Coût d’expédition supporté par Greenweez
           - name: logcost
             description: Coût logistique additionnel
+
+      - name: adwords           
+        identifier: raw_gz_adwords  
+        description: Données Google Ads (campagnes).
+        loaded_at_field: date_date
+        freshness:
+          warn_after: {count: 90, period: day}
+      - name: bing
+        identifier: raw_gz_bing
+        description: Données Bing Ads (campagnes).
+        loaded_at_field: date_date
+        freshness:
+          warn_after: {count: 90, period: day}
+      - name: criteo
+        identifier: raw_gz_criteo
+        description: Données Criteo (campagnes).
+        loaded_at_field: date_date
+        freshness:
+          warn_after: {count: 90, period: day}
+      - name: facebook
+        identifier: raw_gz_facebook
+        description: Données Facebook Ads (campagnes).
+        loaded_at_field: date_date
+        freshness:
+          warn_after: {count: 90, period: day}
 
 models:
   - name: int_sales_margin
