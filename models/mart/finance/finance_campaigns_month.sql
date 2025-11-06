@@ -1,22 +1,22 @@
 -- Agrégat par mois
-with montly as (
+with monthly as (
   select
     date_trunc(date_date, month) as datemonth,
     sum(total_transactions) as total_transactions,
-    sum(total_quantity) as quantity,
-    sum(total_revenue) as revenue,
-    sum(total_purchase_cost) as purchase_cost,
-    sum(total_margin) as margin,
-    sum(total_shipping_fees) as shipping_fee,
-    sum(total_log_costs) as log_cost,
-    sum(total_ship_cost) as ship_cost,
+    sum(quantity) as quantity,
+    sum(revenue) as revenue,
+    sum(purchase_cost) as purchase_cost,
+    sum(margin) as margin,
+    sum(shipping_fee) as shipping_fee,
+    sum(log_cost) as log_cost,
+    sum(ship_cost) as ship_cost,
     sum(operational_margin) as operational_margin,
-    sum(total_ads_cost) as ads_cost,
-    sum(total_impressions) as ads_impression,
-    sum(total_clicks) as ads_clicks
-  from {{ ref('finance_campaigns_days') }}
+    sum(ads_cost) as ads_cost,
+    sum(ads_impressions) as ads_impression,
+    sum(ads_clicks) as ads_clicks
+  from {{ ref('finance_campaigns_day') }}
   group by 1
-),
+)
 
 select
   datemonth,
@@ -27,11 +27,11 @@ select
   ads_impression as ads_impression,
   ads_clicks as ads_clicks,
   quantity,
-  revenue,
-  purchase_cost,
-  margin,
-  shipping_fee,
-  log_cost,
-  ship_cost
+  round(revenue, 2 ) as revenue,
+  round(purchase_cost, 2 ) as purchase_cost,
+  round(margin, 2 ) as margin,
+  round(shipping_fee, 2 ) as shipping_fee,
+  round(log_cost, 2 ) as log_cost,
+  round(ship_cost, 2 ) as ship_cost
 from monthly
 order by datemonth desc

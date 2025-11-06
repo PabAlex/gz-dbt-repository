@@ -19,6 +19,7 @@ total_purchase_cost as purchase_cost,
 total_margin as margin,
 total_shipping_fees as shipping_fee,
 total_log_costs as log_cost,
-total_ship_cost as ship_cost
+total_ship_cost as ship_cost,
+total_transactions
 
 from daily

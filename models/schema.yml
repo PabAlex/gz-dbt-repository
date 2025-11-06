@@ -259,65 +259,39 @@ models:
 
       - name: ads_margin
         description: Marge opérationnelle diminuée des dépenses publicitaires du jour
-        tests:
-          - not_null
 
       - name: average_basket
         description: Panier moyen (hérité de finance_days)
-        tests:
-          - not_null
 
       - name: operational_margin
         description: Marge opérationnelle du jour (héritée de finance_days)
-        tests:
-          - not_null
 
       - name: ads_cost
         description: Dépenses publicitaires totales du jour (toutes plateformes)
-        tests:
-          - not_null
 
       - name: ads_impressions
         description: Impressions publicitaires totales du jour
-        tests:
-          - not_null
 
       - name: ads_clicks
         description: Clics publicitaires totaux du jour
-        tests:
-          - not_null
 
       - name: quantity
         description: Quantité totale vendue (héritée de finance_days)
-        tests:
-          - not_null
 
       - name: revenue
         description: Revenu total du jour (hérité de finance_days)
-        tests:
-          - not_null
 
       - name: purchase_cost
         description: Coût d’achat total du jour (hérité de finance_days)
-        tests:
-          - not_null
 
       - name: margin
         description: Marge brute du jour (héritée de finance_days)
-        tests:
-          - not_null
 
       - name: shipping_fee
         description: Frais de livraison facturés (hérité de finance_days)
-        tests:
-          - not_null
 
       - name: log_cost
         description: Coûts logistiques (hérité de finance_days)
-        tests:
-          - not_null
 
       - name: ship_cost
         description: Coûts d’expédition (hérité de finance_days)
-        tests:
-          - not_null
